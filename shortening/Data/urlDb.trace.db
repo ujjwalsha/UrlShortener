@@ -20,3 +20,12 @@ Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection wa
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 16 more
+2025-10-15 12:32:03.746189+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete [*]table url"; expected "identifier"; SQL statement:
+delete table url [42001-232]
+2025-10-15 12:32:12.807232+05:30 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "delete from [*]table"; expected "identifier"; SQL statement:
+delete from table [42001-232]
+2025-10-15 13:30:22.647583+05:30 jdbc[21]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "ORIGINAL_URL CHARACTER VARYING(255)": "'async () => {     console.log(originalUrl);     if (!originalUrl) return;     t... (493)"; SQL statement:
+insert into url (access_count,created_at,original_url,short_url,id) values (?,?,?,?,default) [22001-232]
