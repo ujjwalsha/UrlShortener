@@ -1,13 +1,9 @@
 package URL_Shortening.shortening.Model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.internal.build.AllowNonPortable;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +16,6 @@ public class Url {
     private Long id;
     private String originalUrl;
     private String shortUrl;
-
     @JsonIgnore
     private LocalDateTime createdAt;
     private long accessCount;
@@ -29,5 +24,4 @@ public class Url {
     {
         this.createdAt =LocalDateTime.now();
     }
-
 }

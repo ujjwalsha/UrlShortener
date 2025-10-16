@@ -2,13 +2,11 @@ package URL_Shortening.shortening.Controller;
 
 import URL_Shortening.shortening.Model.RequestUrl;
 import URL_Shortening.shortening.Service.UrlService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/api")
@@ -34,10 +32,10 @@ public class UrlController {
         return urlService.createShortUrl(requestUrl.getOriginalUrl());
     }
 
-    @GetMapping("/s/{shortUrl}")
-    public ResponseEntity<?> redirectOriginal(@PathVariable String shortUrl)
+    @GetMapping("/r/{shortUrl}")
+    public ResponseEntity<?> redirectOriginal(@PathVariable String shortUrl, HttpServletRequest request)
     {
-        return urlService.redirectToUrl(shortUrl);
+        return urlService.redirectToUrl(shortUrl, request);
     }
 
     @DeleteMapping("/delete/{id}")
