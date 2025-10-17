@@ -2,11 +2,8 @@ import React from 'react'
 
 export default function UrlData({response}) {
   return (
-    
-    <div className='container m-10'>
-
+    <div className='container pt-10 flex justify-center'>
         <table className=' border-collapse text-sm'>
-
             <thead className='bg-gray-800 uppercase text-gray-400 text-xs'>
                 <tr className='border-1 w-xl '>
                     <th className='py-2 px-4 w-xl flex items-center justify-center max-w-[400px]'>OriginalUrl</th>

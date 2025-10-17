@@ -9,8 +9,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StatsService {
@@ -28,21 +31,26 @@ public class StatsService {
     }
 
 
-    public void captureAsynchronous(String shortUrl, HttpServletRequest request) {
+    public void captureAsynchronous(String shortUrl, long accessCount, HttpServletRequest request) {
 
         String uaString = request.getHeader("User-Agent");
         String ip = extractClientIp(request);
         String Browser = userAgentService.getBrowser(uaString);
         String os = userAgentService.getOs(uaString);
         UrlStats click = new UrlStats();
-        String url = "http://localhost:8081/api/r/" + shortUrl;
 
+//        String apiUrl = "https://ipapi.co/" + ip;
+//        RestTemplate restTemplate = new RestTemplate();
+//        String country = restTemplate.getForObject(apiUrl, String.class);
+
+        click.setCountry("India");
         click.setAccessedAt(LocalDateTime.now());
         click.setBrowser(Browser);
         click.setOperatingSystem(os);
         click.setIpAddress(ip);
-        click.setShortUrl(url);
-        click.setCountry("India");
+        click.setShortUrl(shortUrl);
+        click.setAccessCount(accessCount);
+
 
         urlStatsRepo.save(click);
     }
@@ -55,10 +63,10 @@ public class StatsService {
 
     public ResponseEntity<?> getAllStats(String urlCode) {
 
-        Url url = urlRepo.findByShortUrl(urlCode);
+        List<UrlStats> url = urlStatsRepo.findByShortUrl(urlCode);
         System.out.println(url);
-        if(url == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(url.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(urlStatsRepo.findAll(),HttpStatus.OK);
+        return new ResponseEntity<>(url,HttpStatus.OK);
     }
 }

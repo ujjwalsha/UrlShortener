@@ -68,7 +68,9 @@ public class UrlService {
     public ResponseEntity<?> redirectToUrl(String shortUrl, HttpServletRequest request) {
 
         String originalUrl = getOriginalUrl(shortUrl);
-        statsService.captureAsynchronous(shortUrl, request);
+        Url url = urlRepo.findByShortUrl(shortUrl);
+
+        statsService.captureAsynchronous(shortUrl, url.getAccessCount(), request);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originalUrl));

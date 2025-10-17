@@ -1,10 +1,9 @@
-import { useEffect, useEffectEvent, useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 
 export default function SearchPage() {
 
   const [originalUrl, setOriginalUrl] = useState('');
-
   const [shorturl, setShortUrl] = useState('');
   const [urlcode, setUrlcode] = useState('');
   const [copyStatus, setCopystatus] = useState('');
@@ -29,9 +28,7 @@ export default function SearchPage() {
         const data = await response.json();
         const url = data.shortUrl;
         
-        
-        
-        setShortUrl(`http://localhost:8081/api/s/${url}`);
+        setShortUrl(`http://localhost:8081/api/r/${url}`);
 
         setUrlcode(url);
     }
@@ -62,11 +59,10 @@ export default function SearchPage() {
 
   const submitHandle = (e) =>{
       e.preventDefault();
-    shortUrl();
-    handleSubmitStatus();
-    setTrigger(true);
-    console.log("url code is : ", urlcode);
-    AccessCount(urlcode);
+      shortUrl();
+      handleSubmitStatus();
+      setTrigger(true);
+      AccessCount(urlcode);
   }
 
   const AccessCount = (url) =>{
@@ -83,10 +79,6 @@ export default function SearchPage() {
     }
   }
   
-  
-
-
-
   const handleChange = (e) =>{
       setOriginalUrl(e.target.value);
   }
@@ -102,11 +94,13 @@ export default function SearchPage() {
       }
       catch(error)
       {
-            console.log("something wrong in copy");
+         console.log("something wrong in copy");
       }
   }
 
- 
+  const handleStats = () =>{
+      window.open(`/Stats?urlcode=${urlcode}`, "_blank")
+  }
 
   return (
     <div className='grid justify-center gap-10 items-center p-20'>
@@ -118,7 +112,7 @@ export default function SearchPage() {
           onChange={handleChange}
         />
         <button 
-        className='text-xl font-semibold border bg-blue-900 p-2 hover:bg-blue-950 cursor-pointer'
+        className='text-xl font-semibold uppercase border bg-blue-900 p-2 hover:bg-blue-950 cursor-pointer'
         onClick={submitHandle}
         >{submitStatus || 'Submit'}</button>
     </div>
@@ -133,9 +127,13 @@ export default function SearchPage() {
               {copyStatus ||'Copy'}
             </button>
       </div>
-        <p className='p-10 font-semibold'>{shorturl || "your short url would be shown here!😊"}</p>
-        {trigger ? <p className='font-semibold'>your Long Url :  <a href={originalUrl} type='link'>{originalUrl}</a></p> : ''}
-        {trigger ? <p className='font-semibold'> No of click this url:  {accessCount}</p> : ''} 
+        <p className='p-10 font-semibold'>{ shorturl || "your short url would be shown here!😊"}</p>
+        {trigger ? <p className='font-semibold'>your Long Url :  <a href={originalUrl} target='_blank' type='link'>{originalUrl}</a></p> : ''}
+        
+        <div className='flex justify-between items-center'>
+            {trigger ? <p className='font-semibold'> No of click this url:  {accessCount}</p> : ''} 
+            {trigger ? <button className='text-[1em] p-2 cursor-pointer bg-gray-900' onClick={handleStats}>See Stats</button> : ''}
+        </div>
     </div>
 </div>
   )
