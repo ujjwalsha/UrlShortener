@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
@@ -27,9 +29,13 @@ public class UrlController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createUrl(@RequestBody RequestUrl requestUrl)
-    {
+    public ResponseEntity<?> createUrl(@RequestBody RequestUrl requestUrl) throws MalformedURLException {
         return urlService.createShortUrl(requestUrl.getOriginalUrl());
+    }
+
+    @PostMapping("/create/{customName}")
+    public ResponseEntity<?> setCustomName(@RequestBody RequestUrl requestUrl, @PathVariable String customName) throws MalformedURLException {
+        return urlService.setCustomName(requestUrl.getOriginalUrl(), customName);
     }
 
     @GetMapping("/r/{shortUrl}")
@@ -49,8 +55,6 @@ public class UrlController {
     {
         return urlService.updateUrlById(id, requestUrl);
     }
-
-
 
     @GetMapping("/{shortUrl}")
     public ResponseEntity<?> getOriginalUrl(@PathVariable String shortUrl)

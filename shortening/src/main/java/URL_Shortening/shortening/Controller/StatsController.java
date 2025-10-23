@@ -20,6 +20,4 @@ public class StatsController {
     {
         return statsService.getAllStats(urlCode);
     }
-
-
 }

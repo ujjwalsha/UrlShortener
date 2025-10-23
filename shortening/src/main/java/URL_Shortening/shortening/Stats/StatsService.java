@@ -1,7 +1,5 @@
 package URL_Shortening.shortening.Stats;
 
-
-import URL_Shortening.shortening.Model.Url;
 import URL_Shortening.shortening.Model.UrlStats;
 import URL_Shortening.shortening.Repository.UrlRepo;
 import URL_Shortening.shortening.Repository.UrlStatsRepo;
@@ -9,11 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StatsService {
@@ -50,8 +45,6 @@ public class StatsService {
         click.setIpAddress(ip);
         click.setShortUrl(shortUrl);
         click.setAccessCount(accessCount);
-
-
         urlStatsRepo.save(click);
     }
 

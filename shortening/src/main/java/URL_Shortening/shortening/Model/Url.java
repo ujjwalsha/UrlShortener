@@ -14,7 +14,9 @@ public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String originalUrl;
+    @Column(unique = true)
     private String shortUrl;
     @JsonIgnore
     private LocalDateTime createdAt;

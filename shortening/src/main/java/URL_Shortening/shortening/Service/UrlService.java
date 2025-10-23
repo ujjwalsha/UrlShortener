@@ -11,7 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,7 +31,10 @@ public class UrlService {
         this.statsService =statsService;
     }
 
-    public ResponseEntity<?> createShortUrl(String originalUrl) {
+    public ResponseEntity<?> createShortUrl(String originalUrl) throws MalformedURLException {
+
+        if(!validateUrl(originalUrl))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid url");
 
         Optional<Url> existUrl = urlRepo.findByOriginalUrl(originalUrl);
         if(existUrl.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(existUrl.get());
@@ -101,5 +107,39 @@ public class UrlService {
         url.setOriginalUrl(requestUrl.getOriginalUrl());
         urlRepo.save(url);
         return ResponseEntity.status(HttpStatus.OK).body("updated successfully!");
+    }
+
+    public ResponseEntity<?> setCustomName(String originalUrl, String customName) throws MalformedURLException {
+        if(!validateUrl(originalUrl))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid url.");
+
+        Url existUrl = urlRepo.findByShortUrl(customName);
+
+        if(existUrl != null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("url already present.!");
+
+        Url temp = new Url();
+        temp.setOriginalUrl(originalUrl);
+        temp.setShortUrl(customName);
+        temp.setAccessCount(0);
+        urlRepo.save(temp);
+
+        return ResponseEntity.status(HttpStatus.OK).body("custom url Created Successfully.!");
+    }
+
+    private boolean validateUrl(String originalUrl) throws MalformedURLException {
+
+        try
+        {
+            URL url = new URL(originalUrl);
+            System.out.println("protocol is : "+ url.getProtocol() + " Authority : " + url.getAuthority());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String regex = "http:/";
+        String regexTwo = ".com";
+        return !originalUrl.contains(regex) || !originalUrl.contains(regexTwo);
     }
 }

@@ -27,9 +27,7 @@ export default function SearchPage() {
   
         const data = await response.json();
         const url = data.shortUrl;
-        
         setShortUrl(`http://localhost:8081/api/r/${url}`);
-
         setUrlcode(url);
     }
     catch(error)
@@ -54,20 +52,18 @@ export default function SearchPage() {
     setSubmitStatus('Loading... ')
     setTimeout(() => {
         setSubmitStatus('')
-      }, 500);
+      }, 300);
   }
 
-  const submitHandle = (e) =>{
+  const submitHandle = async (e) =>{
       e.preventDefault();
-      shortUrl();
+      await shortUrl();
       handleSubmitStatus();
       setTrigger(true);
       AccessCount(urlcode);
   }
 
   const AccessCount = (url) =>{
-
-    console.log(response);
     const n = response.length;
     for(let i = 0; i < n; i++)
     {
